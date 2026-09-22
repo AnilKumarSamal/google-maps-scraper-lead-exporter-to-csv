@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Maps Lead Scraper",
+  "short_name": "Maps Lead Scraper",
+  "version": "1.0.0",
+  "description": "Extract business leads (name, rating, reviews, phone, website, Maps URL) from Google Maps search results and export them to CSV.",
+  "permissions": ["storage", "downloads", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://www.google.com/maps*",
+    "https://extensionpay.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/maps*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://extensionpay.com/*"],
+      "js": ["extpay.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Maps Lead Scraper",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://extensionpay.com"
+  },
+  "minimum_chrome_version": "102"
+}
