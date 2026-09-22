@@ -1,92 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Maps Lead Scraper</title>
-<link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="app" id="app">
-
-    <header class="topbar">
-      <div class="brand">
-        <img src="icons/icon48.png" alt="" class="brand-icon" />
-        <div class="brand-text">
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Top Bar -->
+      <div class="topbar">
+        <div class="brand">
           <div class="brand-title">Maps Lead Scraper</div>
-          <div class="brand-sub" id="planBadge">Free plan</div>
+          <div id="planBadge" class="brand-sub">Free Tier</div>
+        </div>
+        <button id="themeToggle" class="icon-btn" title="Toggle Theme">
+          🌓
+        </button>
+      </div>
+
+      <!-- License Activation Bar (Hidden for Pro) -->
+      <div id="licenseSection" class="results-card">
+        <div class="results-header"><span>Activate Pro License</span></div>
+        <div style="display: flex; gap: 6px; margin-top: 4px">
+          <input
+            type="text"
+            id="licenseInput"
+            placeholder="Paste Lemon Squeezy Key Here"
+            style="
+              flex: 1;
+              padding: 6px;
+              border-radius: 6px;
+              border: 1px solid var(--border);
+              font-size: 11px;
+            "
+          />
+          <button
+            id="activateBtn"
+            class="btn btn-primary"
+            style="padding: 6px 10px; font-size: 11px; flex: none"
+          >
+            Activate
+          </button>
         </div>
       </div>
-      <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
-        <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-        <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
-          <circle cx="12" cy="12" r="5"></circle>
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-        </svg>
-      </button>
-    </header>
 
-    <section class="notice" id="notMapsNotice" hidden>
-      Open a Google Maps search results page (google.com/maps) to start scraping.
-    </section>
-
-    <section class="usage-card">
-      <div class="usage-row">
-        <span class="usage-label">Today's usage</span>
-        <span class="usage-value" id="usageValue">0 / 15 leads</span>
+      <!-- Counter Display -->
+      <div class="usage-card">
+        <div class="usage-row">
+          <span class="usage-label">Daily Lead Usage</span>
+          <span id="usageValue" class="usage-value">0 / 15</span>
+        </div>
+        <div class="usage-bar">
+          <div id="usageFill" class="usage-bar-fill"></div>
+        </div>
+        <div
+          id="limitNotice"
+          class="notice"
+          style="display: none; margin-top: 8px"
+        >
+          ⚠️ Free limit reached. Upgrade to Pro via the link in the readme for
+          unlimited exports!
+        </div>
       </div>
-      <div class="usage-bar">
-        <div class="usage-bar-fill" id="usageBarFill"></div>
+
+      <!-- Core Controls -->
+      <div class="controls">
+        <button id="startBtn" class="btn btn-primary">⚡ Start Scraping</button>
+        <button id="stopBtn" class="btn btn-danger" style="display: none">
+          🛑 Stop
+        </button>
       </div>
-      <div class="usage-hint" id="usageHint">Free plan resets daily at midnight, local time.</div>
-    </section>
 
-    <section class="status-card" id="statusCard">
-      <div class="status-dot" id="statusDot"></div>
-      <div class="status-text" id="statusText">Ready to scrape.</div>
-    </section>
-
-    <section class="controls">
-      <button id="startBtn" class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        Start Scraping
-      </button>
-      <button id="stopBtn" class="btn btn-danger" hidden>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12"></rect></svg>
-        Stop
-      </button>
-    </section>
-
-    <section class="results-card">
-      <div class="results-header">
-        <span id="resultsCount">0 leads captured this session</span>
-        <button id="clearBtn" class="link-btn">Clear</button>
+      <!-- Export Action -->
+      <div class="results-card">
+        <div class="results-header">
+          <span>Scraped Data Output</span>
+          <span id="liveCounter">0 found</span>
+        </div>
+        <div class="export-row" style="margin-top: 6px">
+          <button id="exportBtn" class="btn btn-secondary" disabled>
+            ⬇️ Export CSV Spreadsheet
+          </button>
+        </div>
       </div>
-      <div class="results-list" id="resultsList">
-        <div class="empty-state" id="emptyState">No leads yet. Click "Start Scraping" on a Maps results page.</div>
-      </div>
-    </section>
-
-    <section class="export-row">
-      <button id="exportBtn" class="btn btn-secondary" disabled>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Export CSV
-      </button>
-      <button id="upgradeBtn" class="btn btn-upgrade">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg>
-        Upgrade to Pro
-      </button>
-    </section>
-
-    <footer class="footer">
-      <span id="footerPlanText">Free plan · 15 leads / day</span>
-      <a href="#" id="manageBtn" class="footer-link" hidden>Manage subscription</a>
-    </footer>
-
-  </div>
-
-  <script src="extpay.js"></script>
-  <script src="popup.js"></script>
-</body>
+    </div>
+    <script src="popup.js"></script>
+  </body>
 </html>
